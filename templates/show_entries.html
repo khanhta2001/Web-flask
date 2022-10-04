@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block body %}
+  <script type="text/javascript" src="{{ url_for('static', filename='functionality.js') }}"></script>
+  <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
+    <dl>
+      <dt>Title:
+      <dd><input type="text" size="30" name="title">
+      <dt>Category:
+      <dd><input type="text" size="20" name="category">
+      <dt>Text:
+      <dd><textarea name="text" rows="5" cols="40"></textarea>
+      <dd><input type="submit" value="share">
+    </dl>
+  </form>
+
+  <ul class="entries" id="entries">
+  <form action="{{ url_for('category') }}" method="get" class="category">
+      <label for="Select_category">Select category:
+        <select name="Select_category" id="Select_category">
+          <option value="All">All</option>
+          {% for category in categories %}
+              {% if category.category != ''%}
+                  <option value="{{ category.category }}">{{ category.category }}</option>
+              {% else %}
+                  <option value="None">None</option>
+              {% endif %}
+          {% endfor %}
+        </select>
+      </label>
+      <button type="submit"> submit </button>
+  </form>
+  {% for entry in entries %}
+      <li class="entryData" id="{{ entry.id }}">
+          <h1>{{ entry.title }}</h1>
+          <h2>{{ entry.category }}</h2>
+          {{ entry.text|safe }}
+          <h3>
+              <button onclick="delete_page({{ entry.id }});deleted_rows({{ entry.id }})">delete</button>
+          </h3>
+      </li>
+  {% else %}
+      <li><em>Unbelievable. No entries here so far</em></li>
+  {% endfor %}
+  </ul>
+{% endblock %}
